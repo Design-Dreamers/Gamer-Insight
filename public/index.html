@@ -1,18 +1,142 @@
-!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Gaming News</title>
-    <link rel="stylesheet" href="css/style.css">
-  </head>
-  
-  <body>
-      <header>
+<!--login page -->
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta name="description" content="WWW Group Project">
+      <meta name="keywords" content="INFO1601, uwi, web">
+      <title>Gaming-News</title>
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+   <!--   <link rel="stylesheet" href="style.css"> -->
+    </head>
+    
+    <style>
+      body 
+      {
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
-      </header>
+      form 
+      {
+        margin: 70px auto;
+        /*border: 1px solid black;*/
+        padding: 25px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 30%;
+      }
 
-    <script></script>
+      h1
+      {
+        text-align: center;
+        color: white;
+      }
 
-  </body>
-</html>
+      b
+      {
+        color: black;
+      }
+
+      ::placeholder
+      {
+        color: black;
+      }
+
+      input[type=text], input[type=password] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid black;
+        box-sizing: border-box;
+        background-color: rgba(255,255,255,0);
+        color: black;
+      }
+
+      button {
+        background-color: white;
+        color: black;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      button:hover {
+        background-color: #04AA6D;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      span.psw {
+        float: right;
+        padding-top: 16px;
+      }
+
+      @media screen and (max-width: 300px) {
+        span.psw {
+           display: block;
+           float: none;
+        }
+        .cancelbtn {
+           width: 100%;
+        }
+      }
+    </style>
+    
+      <body style="background-image: url('https://playtoearngames.com/_next/image?url=https%3A%2F%2Fd2xxnw34h0qte0.cloudfront.net%2F2024%2F03%2FWeb3-Gaming-Latest-News-Updates-and-GamePlays.jpeg&w=3840&q=75'); background-size: cover;">
+
+        <form id= "loginForm">
+          <h1>Login</h1>
+          <div class="container">
+
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" id="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="psw" required>
+
+            <button type="login" onclick="login()">Login</button>
+            <button type="signUp" onclick="signUpPage()">Sign Up</button>
+
+            <!--
+            <label>
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+            </label>
+
+            <span class="psw">Forgot <a href="#">password?</a></span> 
+            -->
+          </div>
+        </form>
+
+        <script>
+          var users[];
+          
+           function login() 
+           {
+              document.getElementById("loginForm").addEventListener("login", function(action) {
+               action.preventDefault();
+
+              var username = document.getElementsByName('uname')[0].value;
+              var password = document.getElementsByName('psw')[0].value;
+
+              var userFound = users.some(user => user.username === username && user.password === password);
+
+               if (userFound) 
+               {
+                 alert("Login was Successful");
+                 window.location.href = "welcome.html";
+               }
+               else 
+               {
+                 alert("User does not exist");
+                 // window.location.href = "signUp.html"; //the user entered the wrong thing by accident
+               }
+             });
+          }
+        </script>
+
+      </body>
+        </html>
