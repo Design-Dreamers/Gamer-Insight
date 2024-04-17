@@ -17,7 +17,8 @@
   form 
     {
       margin: 70px auto;
-      border: 1px solid black;  /*testing*/
+      /*border: 1px solid black;  /*testing*/
+      background-color: rgba(255,255,255,0.5);
       padding: 25px;
       margin-left: auto;
       margin-right: auto;
@@ -27,7 +28,7 @@
     h1
     {
       text-align: center;
-      color: white;
+      color: black;
     }
     
     b
@@ -58,7 +59,7 @@
     button 
     {
       background-color: white;
-      color: black;
+      color: green;
       padding: 14px 20px;
       margin: 8px 0;
       border: none;
@@ -69,6 +70,7 @@
     button:hover 
     {
       background-color: #04AA6D;
+       color: white;
     }
     /*
     .cancelbtn {
@@ -116,47 +118,46 @@
       <input type="text" placeholder="Enter Email" id="email" required>
 
 
-      <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+      <p>By creating an account you agree to our <a href="TermsAndPrivacy.html" style="color:green">Terms & Privacy</a>.</p>
 
-      <button type="submit" id= "newUser" onclick="createAccount()">Create an Account</button>
+      <button type="submit">Create an Account</button>
 
     </div>
   </form>
    
-    <script>
-        var user[];
+<script>
+  var users = [
+    { username: "user1", password: "password1" },
+    { username: "user2", password: "password2" },
+    { username: "user3", password: "password3" },
+    { username: "user4", password: "password4" },
+  ];
 
-       function createAccount() 
-       {
-        document.getElementById("signUpForm").addEventListener("signUp", function(action) 
-        {
-          action.preventDefault();
-          
-          let username = document.getElementById("uname").value;
-          let password = document.getElementById("psw").value;
-          let rePassword = document.getElementById("psw-repeat").value;
-          let email = document.getElementById("email").value;
+  document.getElementById("signUpForm").addEventListener("submit", function(event) {
+    event.preventDefault();
 
-          let userFound = users.some(user => user.username === username && user.password === password);
-          
-          if(psw !== psw-repeat)
-          {
-            alert("Passwords do not match");
-          }
+    let username = document.getElementById("uname").value;
+    let password = document.getElementById("psw").value;
+    let rePassword = document.getElementById("psw-repeat").value;
+    let email = document.getElementById("email").value;
 
-          if (!userFound) 
-          {
-            let user = { username: username, password: password, email: email };
-
-            users.push(user);
-            alert("Sign Up Successful");
-            window.location.href = "welcome.html";
-          }
-          else
-            alert("User already exist");
-      });
+    if (password !== rePassword) {
+      alert("Passwords do not match");
+      return;
     }
-    </script>
-  
-  </body>
-  </html>
+
+    let userFound = users.some(user => user.username === username);
+
+    if (!userFound) {
+      let user = { username: username, password: password, email: email };
+      users.push(user);
+      alert("Sign Up Successful");
+      window.location.href = "welcome.html";
+    } else {
+      alert("User already exists");
+      window.location.href = "index.html";
+    }
+  });
+</script>
+</body>
+</html>
