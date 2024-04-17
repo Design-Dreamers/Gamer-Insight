@@ -30,11 +30,18 @@
             font-weight: bold;
         }
 
+        .logo img {
+            width: 60px; /* Adjust as needed */
+            height: auto;
+        }
+
         .website-name {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 36px;
             color: #fff;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
         }
 
         nav ul {
@@ -137,7 +144,7 @@
             padding: 10px 20px;
             border-radius: 5px;
             border: none;
-            background-color: #dc3545;
+            background-color: #dc3545; /* Red background color */
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -165,6 +172,12 @@
             top: 0;
             left: 0;
             padding: 20px;
+            transform: translateX(-220px); /* Hide sidebar by default */
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.active {
+            transform: translateX(0); /* Show sidebar when active */
         }
 
         .sidebar h2 {
@@ -189,6 +202,35 @@
         }
 
         .sidebar button:hover {
+            background-color: #0d8af6;
+        }
+
+        #logoutBtn {
+            background-color: #dc3545; /* Red background color */
+            color: #fff;
+        }
+
+        #sidebarToggleBtn {
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: none;
+            background-color: #2196F3;
+            color: #fff;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #sidebarToggleBtn::after {
+            font-size: 20px;
+            margin-left: 5px;
+        }
+
+        #sidebarToggleBtn.active::after {
+            content: 'X'; /* Change to 'X' when sidebar is active */
+        }
+
+        #sidebarToggleBtn:hover {
             background-color: #0d8af6;
         }
 
@@ -239,13 +281,16 @@
 </head>
 <body>
     <div class="sidebar">
-        <img src="user-avatar.png" alt="User Avatar">
         <h2 id="sidebarUsername">User Name</h2>
         <button class="saved-videos-btn">Saved Videos</button>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
     </div>
     <header>
-        <div class="logo"> "IMG-20240416-WA0010.jpg"</div>
-        <div class="website-name">GAMER INSIGHT</div>
+        <button id="sidebarToggleBtn">&#9776;</button>
+        <div class="website-name">
+            <img src="media/img/IMG-20240416-WA0010.jpg" alt="Small Logo" style="width: 50px; height: auto; margin-right: 5px;">
+            GAMER INSIGHT
+        </div>
         <nav>
             <ul>
                 <li><a href="#" id="nintendoLink">Nintendo News</a></li>
@@ -253,7 +298,6 @@
                 <li><a href="#" id="xboxLink">Xbox News</a></li>
             </ul>
         </nav>
-     
     </header>
     <main class="content">
         <section class="news-details">
@@ -271,135 +315,161 @@
         </section>
     </main>
     <footer>
-        <button class="logout-btn">Log out</button>
     </footer>
 
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          const sidebarUsername = document.getElementById('sidebarUsername');
-          const urlParams = new URLSearchParams(window.location.search);
-          const username = urlParams.get('username');
-          sidebarUsername.textContent = username;
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+            const sidebar = document.querySelector('.sidebar');
 
-          const newsTable = document.getElementById('newsTable');
-          const savedVideosBtn = document.querySelector('.saved-videos-btn');
-          const savedNewsTitle = document.getElementById('savedNewsTitle');
-          const newsDetailsSection = document.querySelector('.news-details');
-          const backToNewsBtn = document.getElementById('backToNewsBtn');
+            sidebarToggleBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+                sidebarToggleBtn.innerHTML = sidebar.classList.contains('active') ? '✕' : '&#9776;';
+                if (sidebar.classList.contains('active')) {
+                    const closeBtn = document.createElement('button');
+                    closeBtn.classList.add('close-btn');
+                    closeBtn.innerHTML = 'Close Side bar';
+                    closeBtn.addEventListener('click', () => {
+                        sidebar.classList.remove('active');
+                        sidebarToggleBtn.innerHTML = '&#9776;';
+                        closeBtn.remove();
+                    });
+                    sidebar.appendChild(closeBtn);
+                } else {
+                    const closeBtn = document.querySelector('.close-btn');
+                    if (closeBtn) {
+                        closeBtn.remove();
+                    }
+                }
+            });
 
-          const savedVideosData = [];
+            const sidebarUsername = document.getElementById('sidebarUsername');
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            sidebarUsername.textContent = username;
 
-          const toggleSave = (btn, item) => {
-              btn.classList.toggle('saved');
-              if (btn.classList.contains('saved')) {
-                  savedVideosData.push(item); // Save the news item data
-              } else {
-                  const index = savedVideosData.findIndex(savedItem => savedItem.id === item.id);
-                  if (index !== -1) {
-                      savedVideosData.splice(index, 1); // Remove the news item data if it's unsaved
-                  }
-              }
-          };
+            const newsTable = document.getElementById('newsTable');
+            const savedVideosBtn = document.querySelector('.saved-videos-btn');
+            const savedNewsTitle = document.getElementById('savedNewsTitle');
+            const newsDetailsSection = document.querySelector('.news-details');
+            const backToNewsBtn = document.getElementById('backToNewsBtn');
 
-          const showDetails = (item) => {
-              newsDetailsSection.style.display = 'block'; // Show the news details section
-              newsTable.style.display = 'none'; // Hide the news table
-              savedNewsTitle.style.display = 'none'; // Hide the "Saved Videos" title
-              const newsDetailsTitle = document.getElementById('newsDetailsTitle');
-              newsDetailsTitle.textContent = item.snippet.title;
-              const newsDetailsContent = document.getElementById('newsDetailsContent');
-              newsDetailsContent.innerHTML = `
-                  <p><strong>Release Date:</strong> ${item.snippet.publishedAt}</p>
-                  <p><strong>Description:</strong> ${item.snippet.description}</p>
-              `;
-          };
+            const savedVideosData = [];
 
-          const hideDetails = () => {
-              newsDetailsSection.style.display = 'none'; // Hide the news details section
-              newsTable.style.display = 'block'; // Show the news table
-              savedNewsTitle.style.display = 'block'; // Show the "Saved Videos" title
-          };
+            const toggleSave = (btn, item) => {
+                btn.classList.toggle('saved');
+                if (btn.classList.contains('saved')) {
+                    savedVideosData.push(item);
+                } else {
+                    const index = savedVideosData.findIndex(savedItem => savedItem.id === item.id);
+                    if (index !== -1) {
+                        savedVideosData.splice(index, 1);
+                    }
+                }
+            };
 
-          const createNewsItem = (item, isSaved = false) => {
-              const newsItem = document.createElement('div');
-              newsItem.classList.add('news-item');
+            const showDetails = (item) => {
+                newsDetailsSection.style.display = 'block';
+                newsTable.style.display = 'none';
+                savedNewsTitle.style.display = 'none';
+                const newsDetailsTitle = document.getElementById('newsDetailsTitle');
+                newsDetailsTitle.textContent = item.snippet.title;
+                const newsDetailsContent = document.getElementById('newsDetailsContent');
+                newsDetailsContent.innerHTML = `
+                    <p><strong>Release Date:</strong> ${item.snippet.publishedAt}</p>
+                    <p><strong>Description:</strong> ${item.snippet.description}</p>
+                `;
+            };
 
-              const thumbnail = document.createElement('img');
-              thumbnail.src = item.snippet.thumbnails.high.url;
-              thumbnail.alt = item.snippet.title;
+            const hideDetails = () => {
+                newsDetailsSection.style.display = 'none';
+                newsTable.style.display = 'block';
+                savedNewsTitle.style.display = 'block';
+            };
 
-              const gameTitle = document.createElement('h3');
-              gameTitle.textContent = item.snippet.title;
+            const createNewsItem = (item, isSaved = false) => {
+                const newsItem = document.createElement('div');
+                newsItem.classList.add('news-item');
 
-              const saveBtn = document.createElement('button');
-              saveBtn.classList.add('save-btn');
-              saveBtn.textContent = isSaved ? 'Saved' : 'Save';
-              if (isSaved) {
-                  saveBtn.classList.add('saved');
-              }
-              saveBtn.addEventListener('click', (e) => {
-                  e.stopPropagation();
-                  toggleSave(saveBtn, item);
-              });
+                const thumbnail = document.createElement('img');
+                thumbnail.src = item.snippet.thumbnails.high.url;
+                thumbnail.alt = item.snippet.title;
 
-              newsItem.appendChild(thumbnail);
-              newsItem.appendChild(gameTitle);
-              newsItem.appendChild(saveBtn);
+                const gameTitle = document.createElement('h3');
+                gameTitle.textContent = item.snippet.title;
 
-              // Add click event listener to show details when clicked
-              newsItem.addEventListener('click', () => {
-                  showDetails(item);
-              });
+                const saveBtn = document.createElement('button');
+                saveBtn.classList.add('save-btn');
+                saveBtn.textContent = isSaved ? 'Saved' : 'Save';
+                if (isSaved) {
+                    saveBtn.classList.add('saved');
+                }
+                saveBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleSave(saveBtn, item);
+                });
 
-              // Open video on YouTube when thumbnail is clicked
-              thumbnail.addEventListener('click', () => {
-                  const videoId = item.snippet.resourceId.videoId;
-                  window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
-              });
+                newsItem.appendChild(thumbnail);
+                newsItem.appendChild(gameTitle);
+                newsItem.appendChild(saveBtn);
 
-              newsTable.appendChild(newsItem);
-          };
+                newsItem.addEventListener('click', () => {
+                    showDetails(item);
+                });
 
-          const fetchGames = (url) => {
-              fetch(url)
-                  .then(response => response.json())
-                  .then(data => {
-                      newsTable.innerHTML = '';
-                      data.items.forEach(item => {
-                          const isSaved = savedVideosData.some(savedItem => savedItem.id === item.id);
-                          createNewsItem(item, isSaved);
-                      });
-                  })
-                  .catch(error => {
-                      console.error('Error fetching news:', error);
-                      newsTable.innerHTML = '<p>Failed to fetch news. Please try again later.</p>';
-                  });
-          };
+                thumbnail.addEventListener('click', () => {
+                    const videoId = item.snippet.resourceId.videoId;
+                    window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+                });
 
-          const savedVideosClickHandler = () => {
-              newsTable.innerHTML = ''; // Clear existing news items
-              savedVideosData.forEach(item => {
-                  createNewsItem(item, true); // Display the saved news items
-              });
-              // Hide the saved videos title in the news details section
-              savedNewsTitle.style.display = 'none';
-          };
+                newsTable.appendChild(newsItem);
+            };
 
-          const backToNewsClickHandler = () => {
-              hideDetails();
-          };
+            const fetchGames = (url) => {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        newsTable.innerHTML = '';
+                        data.items.forEach(item => {
+                            const isSaved = savedVideosData.some(savedItem => savedItem.id === item.id);
+                            createNewsItem(item, isSaved);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching news:', error);
+                        newsTable.innerHTML = '<p>Failed to fetch news. Please try again later.</p>';
+                    });
+            };
 
-          savedVideosBtn.addEventListener('click', savedVideosClickHandler);
-          const nintendoLink = document.getElementById('nintendoLink');
-          const playstationLink = document.getElementById('playstationLink');
-          const xboxLink = document.getElementById('xboxLink');
-          nintendoLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UUGIY_O-8vW4rfX98KlMkvRg&key=AIzaSyCAFD6-mNeg2aW6ZO6hMbKwSJmIswU5lyI'));
-          playstationLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UU-2Y8dQb0S6DtpxNgAKoJKA&key=AIzaSyAsY85MTARxhLd0sXiFQZGe4j47xBmNKu8'));
-          xboxLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UUjBp_7RuDBUYbd1LegWEJ8g&key=AIzaSyBOt78wL4fI03I-cxqMwK7dU8NeJaB81E0'));
-          backToNewsBtn.addEventListener('click', backToNewsClickHandler);
-      });
+            const savedVideosClickHandler = () => {
+                newsTable.innerHTML = '';
+                savedVideosData.forEach(item => {
+                    createNewsItem(item, true);
+                });
+                savedNewsTitle.style.display = 'none';
+            };
+
+            const backToNewsClickHandler = () => {
+                hideDetails();
+            };
+
+            savedVideosBtn.addEventListener('click', savedVideosClickHandler);
+            const nintendoLink = document.getElementById('nintendoLink');
+            const playstationLink = document.getElementById('playstationLink');
+            const xboxLink = document.getElementById('xboxLink');
+            nintendoLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UUGIY_O-8vW4rfX98KlMkvRg&key=AIzaSyCAFD6-mNeg2aW6ZO6hMbKwSJmIswU5lyI'));
+            playstationLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UU-2Y8dQb0S6DtpxNgAKoJKA&key=AIzaSyAsY85MTARxhLd0sXiFQZGe4j47xBmNKu8'));
+            xboxLink.addEventListener('click', () => fetchGames('https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=10&playlistId=UUjBp_7RuDBUYbd1LegWEJ8g&key=AIzaSyBOt78wL4fI03I-cxqMwK7dU8NeJaB81E0'));
+            backToNewsBtn.addEventListener('click', backToNewsClickHandler);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', () => {
+                window.location.href = 'signup.html';
+            });
+        });
     </script>
-    </body>
-    </html>
 </body>
 </html>
+
