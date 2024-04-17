@@ -1,4 +1,3 @@
-<!--login page -->
 <!DOCTYPE html>
   <html lang="en">
     <head>
@@ -6,7 +5,6 @@
       <meta name="keywords" content="INFO1601, uwi, web">
       <title>Gaming-News</title>
       <meta name="viewport" content="width=device-width,initial-scale=1">
-   <!--   <link rel="stylesheet" href="style.css"> -->
     </head>
     
     <style>
@@ -19,6 +17,7 @@
       {
         margin: 70px auto;
         /*border: 1px solid black;*/
+        background-color: rgba(255,255,255,0.5);
         padding: 25px;
         margin-left: auto;
         margin-right: auto;
@@ -28,7 +27,7 @@
       h1
       {
         text-align: center;
-        color: white;
+        color: black;
       }
 
       b
@@ -54,7 +53,7 @@
 
       button {
         background-color: white;
-        color: black;
+        color: green;
         padding: 14px 20px;
         margin: 8px 0;
         border: none;
@@ -64,6 +63,7 @@
 
       button:hover {
         background-color: #04AA6D;
+        color: white;
       }
 
       .container {
@@ -98,45 +98,41 @@
             <label for="psw"><b>Password</b></label>
             <input type="password" placeholder="Enter Password" id="psw" required>
 
-            <button type="login" onclick="login()">Login</button>
-            <button type="signUp" onclick="signUpPage()">Sign Up</button>
+            <button type="submit">Login</button>
+            <button type="button" onclick="signUpPage()">Sign Up</button>
 
-            <!--
-            <label>
-              <input type="checkbox" checked="checked" name="remember"> Remember me
-            </label>
-
-            <span class="psw">Forgot <a href="#">password?</a></span> 
-            -->
           </div>
         </form>
 
         <script>
-          var users[];
-          
-           function login() 
-           {
-              document.getElementById("loginForm").addEventListener("login", function(action) {
-               action.preventDefault();
+    var users = [
+      { username: "user1", password: "password1" },
+      { username: "user2", password: "password2" },
+      { username: "user3", password: "password3" },
+      { username: "user4", password: "password4" },
+    ];
 
-              var username = document.getElementsByName('uname')[0].value;
-              var password = document.getElementsByName('psw')[0].value;
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-              var userFound = users.some(user => user.username === username && user.password === password);
+      var username = document.getElementById('uname').value;
+      var password = document.getElementById('psw').value;
 
-               if (userFound) 
-               {
-                 alert("Login was Successful");
-                 window.location.href = "welcome.html";
-               }
-               else 
-               {
-                 alert("User does not exist");
-                 // window.location.href = "signUp.html"; //the user entered the wrong thing by accident
-               }
-             });
-          }
-        </script>
+      var userFound = users.some(user => user.username === username && user.password === password);
 
-      </body>
-        </html>
+      if (userFound) {
+        alert("Login was Successful");
+        window.location.href = "welcome.html";
+      } else {
+        alert("User does not exist");
+        // window.location.href = "signUp.html"; // Redirect to sign up page
+      }
+    });
+
+    function signUpPage() {
+      window.location.href = "signUp.html"; // Change this to your sign-up page
+    }
+  </script>
+
+</body>
+</html>
