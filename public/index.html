@@ -87,12 +87,13 @@
 
   <script>
     // Define the users array
-    var users = [
-      { username: "user1", password: "password1" },
-      { username: "user2", password: "password2" },
-      { username: "user3", password: "password3" },
-      { username: "user4", password: "password4" },
-    ];
+    var users = [];
+
+    // Retrieve users data from localStorage
+    const storedUsers = localStorage.getItem('users');
+    if (storedUsers) {
+      users = JSON.parse(storedUsers);
+    }
 
     // Retrieve stored username and password from localStorage
     const storedUsername = localStorage.getItem('username');
@@ -132,4 +133,3 @@
   </script>
 </body>
 </html>
-
