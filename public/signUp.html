@@ -3,7 +3,7 @@
 <head>
   <meta name="description" content="WWW Group Project">
   <meta name="keywords" content="INFO1601, uwi, web">
-  <title>Gamer Insight</title>
+  <title>Gaming-News</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body {
@@ -88,19 +88,20 @@
 
       <p>By creating an account you agree to our <a href="TermsAndPrivacy.html" style="color:green">Terms & Privacy</a>.</p>
 
-      <button type="submit" >Create an Account</button>
-
+      <button type="submit">Create an Account</button>
+      <button type="button" onclick="goBack()">Back</button>
     </div>
   </form>
 
   <script>
     // Define the users array
-    var users = [
-      { username: "user1", password: "password1" },
-      { username: "user2", password: "password2" },
-      { username: "user3", password: "password3" },
-      { username: "user4", password: "password4" },
-    ];
+    var users = [];
+
+    // Retrieve users data from localStorage
+    const storedUsers = localStorage.getItem('users');
+    if (storedUsers) {
+      users = JSON.parse(storedUsers);
+    }
 
     document.getElementById("signUpForm").addEventListener("submit", function(event) {
       event.preventDefault();
@@ -120,34 +121,24 @@
       if (!userFound) {
         let user = { username: username, password: password, email: email };
         users.push(user);
+        localStorage.setItem('users', JSON.stringify(users)); // Store updated users array in localStorage
         alert("Sign Up Successful");
 
         // Redirect to navbar.html with username as URL parameter
-        window.location.href = `welcome.html?username=${username}`;
+        window.location.href = `navbar.html?username=${username}`;
       } else {
         alert("User already exists");
         window.location.href = "index.html";
       }
 
-      // Store username and password in localStorage
+      // Store username and password in localStorage (optional, you may remove this)
       localStorage.setItem('username', username);
       localStorage.setItem('password', password);
     });
 
-    // Retrieve stored username and password from localStorage
-    const storedUsername = localStorage.getItem('username');
-    const storedPassword = localStorage.getItem('password');
-
-    // Set the input fields if there's a stored username
-    if (storedUsername) {
-      document.getElementById('uname').value = storedUsername;
-      document.getElementById('psw').focus(); // Focus on the password field
-    }
-
-    function signUpPage() {
-      window.location.href = "signUp.html"; // Change this to your sign-up page
+    function goBack() {
+      window.history.back(); // Navigate back to the previous page
     }
   </script>
 </body>
 </html>
-
