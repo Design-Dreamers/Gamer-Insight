@@ -118,14 +118,18 @@
 
         // Store username and password in localStorage
         localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
+            localStorage.setItem('password', password);
 
-        // Redirect to navbar.html after successful login
-        window.location.href = "navbar.html";
-      } else {
-        alert("Invalid Username or Password");
-      }
-    });
+            // Redirect to welcome.html after successful login
+            window.location.href = "welcome.html";
+          } else {
+            alert("Invalid Username or Password");
+          }
+        });
+
+        function signUpPage() {
+          window.location.href = "signUp.html"; // Change this to your sign-up page
+        }
 
     function signUpPage() {
       window.location.href = "signUp.html"; // Change this to your sign-up page
