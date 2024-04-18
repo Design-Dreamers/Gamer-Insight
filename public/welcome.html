@@ -19,6 +19,15 @@
 
         h1 {
             font-size: 36px;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
         }
 
         .button-container {
@@ -109,12 +118,17 @@
           margin-top: 20px;
           text-align: center; /* Center the text horizontally */
       }
+
+     
+      
     </style>
 </head>
 
 <body>
-    <h1>Welcome, User!</h1>
-    <p>We give new updates of the following:</p>
+
+    <h1>Welcome to Gaming Insight, </h1>
+    <h2 id="Username"> </h2>
+    <p>Were we share all of the lastest news of the following gaming platform with you:</p>
     <div class="button-container">
         <div class="image-button" id="nintendoBtn">
             <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/4074674c-ad77-412d-aafe-6d276b3cacda-profile_image-300x300.png"
@@ -136,10 +150,18 @@
             </div>
         </div>
     </div>
+
     <div class="button-container">
       <h3> Click to explore the news</h3>
-        <a href="navbar.html" class="button">Go Explore</a>
+        <a href="./navbar.html" >Go Explore</a>
     </div>
+
+    <script>
+         const Username = document.getElementById('Username');
+           const urlParams = new URLSearchParams(window.location.search);
+           const username = urlParams.get('username');
+           Username.textContent = username;
+    </script>
 </body>
 
 </html>
